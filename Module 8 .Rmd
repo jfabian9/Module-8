@@ -1,0 +1,144 @@
+---
+title: "Model 8 Assignment"
+author: "Jacob Fabian"
+date: "2022-10-26"
+output:
+  pdf_document: default
+  html_document: default
+---
+```{r}
+library(lpSolveAPI)
+library(ucminf)
+library(Benchmarking)
+library(ggplot2)
+```
+
+
+###CRS
+
+```{r}
+x <- matrix(c(150,400,320,520,350,320,0.2,0.7,1.2,2,1.2,0.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000), ncol=2)
+z <- dea(x,y,RTS = "crs")
+z
+peers(z)
+lambda(z)
+rowSums(x)
+rowSums(y)
+dea.plot( rowSums(x),rowSums(y),RTS="crs")
+a <- as.data.frame(matrix(c(x,y),ncol=4))
+a
+ggplot(data=a,aes(V2,V3)) +
+  geom_line(aes(color="red")) +
+  geom_line(aes(V2,V4),color="yellow",show.legend = T)
+```
+### Facility 1-4 are efficient. Facility 5-6 are not efficient. 
+
+
+###VRS
+
+
+```{r}
+x <- matrix(c(150,400,320,520,350,320,.2,.7,1.2,2,1.2,.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000), ncol=2)
+z <- dea(x,y,RTS = "vrs")
+z
+peers(z)
+lambda(z)
+rowSums(x)
+rowSums(y)
+dea.plot( rowSums(x),rowSums(y),RTS="vrs",wx=0.01,wy=0.01)
+```
+
+### Facility 6 is inefficient.
+
+
+###IRS
+
+```{r}
+x <- matrix(c(150,400,320,520,350,320,.2,.7,1.2,2,1.2,.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000), ncol=2)
+z <- dea(x,y,RTS = "irs")
+z
+peers(z)
+lambda(z)
+rowSums(x)
+rowSums(y)
+dea.plot( rowSums(x),rowSums(y),RTS="irs",wx=0.01,wy=0.01)
+```
+### Facility 6 is inefficient. 
+
+
+
+###DRS
+
+```{r}
+x <- matrix(c(150,400,320,520,350,320,.2,.7,1.2,2,1.2,.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000), ncol=2)
+z <- dea(x,y,RTS = "drs")
+z
+peers(z)
+lambda(z)
+rowSums(x)
+rowSums(y)
+dea.plot( rowSums(x),rowSums(y),RTS="drs",wx=0.01,wy=0.01)
+```
+### Both facility 5 and 6 are inefficient, Facility 5 could be updated by closing to the facility 1,2 and 4. Facility 6 should be updated by using the facility 1,2 and 4. Both coeficients should be the lambda values. 
+
+###FDH
+
+```{r}
+x <- matrix(c(150,400,320,520,350,320,.2,.7,1.2,2,1.2,.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000), ncol=2)
+z <- dea(x,y,RTS = "fdh", ORIENTATION = 2)
+z
+peers(z)
+lambda(z)
+rowSums(x)
+rowSums(y)
+dea.plot( rowSums(x),rowSums(y),RTS="fdh",wx=0.01,wy=0.01)
+```
+### All facilities are efficient. 
+
+
+##FDH
+```{r}
+x <- matrix(c(150,400,320,520,350,320,.2,.7,1.2,2,1.2,.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000), ncol=2)
+z <- dea(x,y,RTS = "fdh", ORIENTATION = 2)
+z
+peers(z)
+lambda(z)
+rowSums(x)
+rowSums(y)
+dea.plot( rowSums(x),rowSums(y),RTS="fdh",wx=0.01,wy=0.01)
+```
+### All facilities are efficient. 
+
+###FRH
+
+```{r}
+x <- matrix(c(150,400,320,520,350,320,.2,.7,1.2,2,1.2,.7),ncol = 2)
+y <- matrix(c(14000,14000,42000,28000,19000,14000,3500,21000,10500,42000,25000,15000), ncol=2)
+z <- dea(x,y,RTS = "add")
+z
+peers(z)
+lambda(z)
+rowSums(x)
+rowSums(y)
+dea.plot( rowSums(x),rowSums(y),RTS="add",wx=0.01,wy=0.01)
+```
+### All facilities are all efficient
+
+### CRS - Facility 1-4 are efficient. Facility 5-6 are not efficient. 
+### VRS - Facility 6 is inefficient.
+### IRS - Facility 6 is inefficient. 
+### DRS - Both facility 5 and 6 are inefficient. Both coeficients should be the lambda values
+### FDH - All facilities are efficient.
+### FRH - All facilities are efficient
+### Under VRS and IRS, the peers unit for inefficient facilities were 1,2 and 5.
+### Under CRS and DRS, the peers unites were 1,2,and 4. 
+
+
+
+
